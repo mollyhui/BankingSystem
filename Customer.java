@@ -6,15 +6,18 @@ public class Customer extends User implements Serializable{
     private double walletAmount;
     private int creditScore;
     private Loan loan = null;
+    
+    private Account account;
     // Savings Account field
     // Checkings Account field
     // Securities Account field
 
 
-    Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore) {
+    Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore, Account account) {
         super(firstName, lastName, ssn, password);
         this.walletAmount = walletAmount;
         this.creditScore = creditScore;
+        this.account = account;
     }
 
     /**
@@ -23,6 +26,9 @@ public class Customer extends User implements Serializable{
      */
     // public void addBankAccount(String type, Account account) throws Exception{}
 
+    public Account getAccount() {
+    	return this.account;
+    }
     public double getWalletAmount() {
         return walletAmount;
     }
