@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 
 public class Customer extends User implements Serializable{
@@ -7,28 +8,53 @@ public class Customer extends User implements Serializable{
     private int creditScore;
     private Loan loan = null;
     
-    private Account account;
+    private Hashtable<String, Account> account = new Hashtable<String, Account>();
     // Savings Account field
     // Checkings Account field
     // Securities Account field
 
 
-    Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore, Account account) {
+    Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore) {
         super(firstName, lastName, ssn, password);
         this.walletAmount = walletAmount;
         this.creditScore = creditScore;
-        this.account = account;
     }
 
     /**
      * ADD ACCOUNT (checkings, savings, or securities)
      * exception: if that account type already exists
      */
-    // public void addBankAccount(String type, Account account) throws Exception{}
-
-    public Account getAccount() {
-    	return this.account;
+    public void addBankAccount(String type, Account account) throws Exception{
+    	switch(type) {
+    	case "Checking":
+    		if (!checkExistingAccount(type)) this.account.put(type, account);
+    		else throw new InvalidAccountException();
+    		break;
+    	case "Saving":
+    		if (!checkExistingAccount(type)) this.account.put(type, account);
+    		else throw new InvalidAccountException();
+    		break;
+    	case "Security":
+    		if (!checkExistingAccount(type)) this.account.put(type, account);
+    		else throw new InvalidAccountException();
+    		break;
+    	default:
+    		System.out.println("Invalid account type.");
+    		break;
+    	}
     }
+    public boolean checkExistingAccount(String type){
+    	boolean existed = false;
+    	if (account.containsKey("type")) {
+    		existed = true;
+    	}
+    	return existed;
+    	
+    }
+    public Account getAccount(String type) {
+    	return this.account.get(type);
+    }
+    
     public double getWalletAmount() {
         return walletAmount;
     }
