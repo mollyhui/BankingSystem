@@ -25,24 +25,10 @@ public class Customer extends User implements Serializable{
      * exception: if that account type already exists
      */
     public void addBankAccount(String type, Account account) throws Exception{
-    	switch(type) {
-    	case "Checking":
-    		if (!checkExistingAccount(type)) this.account.put(type, account);
-    		else throw new InvalidAccountException();
-    		break;
-    	case "Saving":
-    		if (!checkExistingAccount(type)) this.account.put(type, account);
-    		else throw new InvalidAccountException();
-    		break;
-    	case "Security":
-    		if (!checkExistingAccount(type)) this.account.put(type, account);
-    		else throw new InvalidAccountException();
-    		break;
-    	default:
-    		System.out.println("Invalid account type.");
-    		break;
-    	}
+    	if (!checkExistingAccount(type)) this.account.put(type, account);
+		else throw new InvalidAccountException();
     }
+    
     public boolean checkExistingAccount(String type){
     	boolean existed = false;
     	if (account.containsKey("type")) {
