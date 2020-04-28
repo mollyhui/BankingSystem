@@ -3,6 +3,8 @@ public class ClassTester {
         Customer nelson = new Customer("Nelson", "Mei", "123456789", "1234", 1000, 800);
         nelson.addBankAccount("Checking", new Checking(1000));
         nelson.addBankAccount("Saving", new Saving(1000));
+        //nelson.addBankAccount("Saving", new Saving(5000));
+
         
         Manager amber = new Manager("Amber", "Sun", "999999999", "7890");
         LoanApplication application = new LoanApplication(nelson, 800000, 36);
