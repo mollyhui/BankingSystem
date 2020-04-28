@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public abstract class Account  implements Serializable{
     private double balance = 0;
-    private double interest = 0.02;
+    private double interest = 0;
     private int accountNumber;
     private static int numberOfAccounts = 1000000;
     private double transactionFee;
@@ -40,8 +40,6 @@ public abstract class Account  implements Serializable{
     public void setInterest(double interest) {
         this.interest = interest;
     }
-
-    
     
     public void withdraw(double amount) throws InsufficientFundsException{
         if(amount + transactionFee > balance){
@@ -57,6 +55,15 @@ public abstract class Account  implements Serializable{
         amount = amount + amount * interest;
         balance += amount;
     }
+    
+    public void transfer(Account account, double amount) throws Exception{
+		if(amount + this.getTransactionFee() > this.getBalance()){
+            throw new InsufficientFundsException();
+        }else{
+        	this.setBalance(this.getBalance()-amount-this.getTransactionFee());
+        	account.setBalance(account.getBalance() + amount);
+        }
+	}
 
     public double getTransactionFee() {
         return transactionFee;

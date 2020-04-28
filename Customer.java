@@ -80,6 +80,19 @@ public class Customer extends User implements Serializable{
         this.loan.acceptMonthlyPayment();
         this.walletAmount -= this.loan.getMonthlyPayment();
     }
+    
+    public void SavingtransferToSecurity(double amount) throws Exception{
+    	Account saving = this.account.get("Saving");
+    	Account security = this.account.get("Security");
+		if(amount + saving.getTransactionFee() > saving.getBalance()){
+            throw new InsufficientFundsException();
+        }else if (amount < 1000) {
+        	throw new InvalidAmountException();
+        }else{
+        	saving.setBalance(saving.getBalance()-amount-saving.getTransactionFee());
+        	security.setBalance(security.getBalance()+amount);
+        }
+	}
 
 
     @Override
