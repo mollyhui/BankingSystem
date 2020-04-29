@@ -70,7 +70,6 @@ public class Customer extends User implements Serializable{
 
     public void makeLoanPayment() throws InsufficientFundsException{
         double loanPayment = loan.getMonthlyPayment();
-        System.out.println(loanPayment);
         if (netWorthWithoutSecurity() < loanPayment){
             throw new InsufficientFundsException();
         }
@@ -113,7 +112,6 @@ public class Customer extends User implements Serializable{
         if(AccountAlreadyExisted("Saving")) {
             accumulator += this.account.get("Saving").getBalance();
         }
-        System.out.println(accumulator);
         return accumulator;
     }
     
