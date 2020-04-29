@@ -9,9 +9,6 @@ public class Customer extends User implements Serializable{
     private Loan loan = null;
     
     private Hashtable<String, Account> account = new Hashtable<String, Account>();
-    // Savings Account field
-    // Checkings Account field
-    // Securities Account field
 
 
     Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore) {
@@ -72,13 +69,50 @@ public class Customer extends User implements Serializable{
     }
 
     public void makeLoanPayment() throws InsufficientFundsException{
-        // take from savings, or from checkings first
-        if (this.walletAmount < this.loan.getMonthlyPayment()){
+        double loanPayment = loan.getMonthlyPayment();
+        if (netWorthWithoutSecurity() < loanPayment){
             throw new InsufficientFundsException();
         }
 
-        this.loan.acceptMonthlyPayment();
-        this.walletAmount -= this.loan.getMonthlyPayment();
+        loan.acceptMonthlyPayment();
+
+        // deduct from wallet
+        if (walletAmount > loanPayment) {
+            walletAmount -= loanPayment;
+        } else {
+            double paidSoFar = walletAmount;
+            double toPay = loanPayment - paidSoFar;
+            walletAmount = 0;
+
+            // deduct from checking
+            if (account.containsKey("Checking")) {
+                if (account.get("Checking").getBalance() > toPay) {
+                    account.get("Checking").setBalance(account.get("Checking").getBalance() - toPay);
+                } else {
+
+                    // deduct from saving (Emptied checking)
+                    paidSoFar += account.get("Checking").getBalance();
+                    toPay = loanPayment - paidSoFar;
+                    account.get("Checking").setBalance(0);
+                    account.get("Saving").setBalance(account.get("Saving").getBalance() - toPay);
+                }
+            } else {
+                // deduct from saving (No checking)
+                account.get("Saving").setBalance(account.get("Saving").getBalance() - toPay);
+            }
+        }
+
+    }
+
+    private double netWorthWithoutSecurity() {
+        double accumulator = this.walletAmount;
+        if(AccountAlreadyExisted("Checking")) {
+            accumulator += this.account.get("Checking").getBalance();
+        }
+        if(AccountAlreadyExisted("Saving")) {
+            accumulator += this.account.get("Saving").getBalance();
+        }
+        return accumulator;
     }
     
     public void SavingtransferToSecurity(double amount) throws Exception{
