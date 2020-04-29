@@ -60,16 +60,17 @@ public class Customer extends User implements Serializable{
         this.walletAmount -= amount;
     }
 
-    public void addLoan(Loan loan) throws Exception{
-        if (this.loan != null) {
-            throw new Exception();
+    public void addLoan(Loan loan) throws TooManyLoansException{
+        if (this.loan == null) {
+            this.loan = loan;
+        } else {
+            throw new TooManyLoansException();
         }
-
-        this.loan = loan;
     }
 
     public void makeLoanPayment() throws InsufficientFundsException{
         double loanPayment = loan.getMonthlyPayment();
+        System.out.println(loanPayment);
         if (netWorthWithoutSecurity() < loanPayment){
             throw new InsufficientFundsException();
         }
@@ -78,11 +79,11 @@ public class Customer extends User implements Serializable{
 
         // deduct from wallet
         if (walletAmount > loanPayment) {
-            walletAmount -= loanPayment;
+            subtractFromWallet(loanPayment);
         } else {
             double paidSoFar = walletAmount;
             double toPay = loanPayment - paidSoFar;
-            walletAmount = 0;
+            subtractFromWallet(walletAmount);
 
             // deduct from checking
             if (account.containsKey("Checking")) {
@@ -112,6 +113,7 @@ public class Customer extends User implements Serializable{
         if(AccountAlreadyExisted("Saving")) {
             accumulator += this.account.get("Saving").getBalance();
         }
+        System.out.println(accumulator);
         return accumulator;
     }
     
