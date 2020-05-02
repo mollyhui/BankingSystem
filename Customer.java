@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -11,10 +12,11 @@ public class Customer extends User implements Serializable{
     private Hashtable<String, Account> account = new Hashtable<String, Account>();
 
 
-    Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore) {
+    Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore) throws SQLException {
         super(firstName, lastName, ssn, password);
         this.walletAmount = walletAmount;
         this.creditScore = creditScore;
+        AppDatabase.createCustomer(ssn, password, firstName, lastName, walletAmount, creditScore);
     }
 
     /**
