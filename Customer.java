@@ -54,12 +54,14 @@ public class Customer extends User implements Serializable{
         return "basic";
     }
 
-    public void addToWallet(double amount) {
+    public void addToWallet(double amount) throws SQLException {
         this.walletAmount += amount;
+        AppDatabase.updateCustomerWallet(this.getSsn(), this.walletAmount);
     }
 
-    public void subtractFromWallet(double amount) {
+    public void subtractFromWallet(double amount) throws SQLException {
         this.walletAmount -= amount;
+        AppDatabase.updateCustomerWallet(this.getSsn(), this.walletAmount);
     }
 
     public void addLoan(Loan loan) throws TooManyLoansException{
@@ -70,7 +72,7 @@ public class Customer extends User implements Serializable{
         }
     }
 
-    public void makeLoanPayment() throws InsufficientFundsException{
+    public void makeLoanPayment() throws InsufficientFundsException, SQLException {
         double loanPayment = loan.getMonthlyPayment();
         if (netWorthWithoutSecurity() < loanPayment){
             throw new InsufficientFundsException();

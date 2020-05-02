@@ -4,6 +4,8 @@ public class ClassTester {
         nelson.addBankAccount("Checking", new Checking(1000));
         nelson.addBankAccount("Saving", new Saving(7000));
         nelson.addBankAccount("Security", new SecurityAccount(0));
+        nelson.addToWallet(3);
+        nelson.subtractFromWallet(10);
         
 //        System.out.println("Original security account: " + "\n" + nelson.getAccount("Security"));
 //        System.out.println("Original saving account: " + "\n" + nelson.getAccount("Saving"));
