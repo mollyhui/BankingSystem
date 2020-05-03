@@ -1,11 +1,9 @@
 import java.io.Serializable;
-import java.sql.SQLException;
 
 public class Manager extends User implements Serializable {
 
-    Manager(String firstName, String lastName, String ssn, String password) throws SQLException {
+    Manager(String firstName, String lastName, String ssn, String password) {
         super(firstName, lastName, ssn, password);
-        AppDatabase.createManager(ssn, password, firstName, lastName);
     }
 
     public String getAuthorization() {
