@@ -1,23 +1,17 @@
 public class User {
 
-    private final String firstName;
-    private final String lastName;
+    private final String name;
     private final String ssn;
     private String password;
 
-    public User(String firstName, String lastName, String ssn, String password) {
-        this.firstName= firstName;
-        this.lastName = lastName;
+    public User(String name, String ssn, String password) {
+        this.name=name;
         this.ssn = ssn;
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getName() {
+        return this.name;
     }
 
     public String getSsn() {

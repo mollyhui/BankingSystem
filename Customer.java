@@ -11,8 +11,8 @@ public class Customer extends User implements Serializable{
     private Hashtable<String, Account> account = new Hashtable<String, Account>();
 
 
-    Customer(String firstName, String lastName, String ssn, String password, double walletAmount, int creditScore) {
-        super(firstName, lastName, ssn, password);
+    Customer(String name, String ssn, String password, double walletAmount, int creditScore) {
+        super(name, ssn, password);
         this.walletAmount = walletAmount;
         this.creditScore = creditScore;
     }
@@ -132,8 +132,7 @@ public class Customer extends User implements Serializable{
     @Override
     public String toString(){
         return "\nCustomer Information\n" +
-                "First Name: " + getFirstName() + "\n" +
-                "Last Name: " + getLastName() +  "\n" +
+                "First Name: " + getName() + "\n" +
                 "SSN: " + getSsn() +  "\n" +
                 "Cash in hand: " + getWalletAmount() + "\n" +
                 "Credit Score: " + getCreditScore() + "\n" +

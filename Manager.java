@@ -2,8 +2,8 @@ import java.io.Serializable;
 
 public class Manager extends User implements Serializable {
 
-    Manager(String firstName, String lastName, String ssn, String password) {
-        super(firstName, lastName, ssn, password);
+    Manager(String name, String ssn, String password) {
+        super(name, ssn, password);
     }
 
     public String getAuthorization() {
@@ -13,8 +13,7 @@ public class Manager extends User implements Serializable {
     @Override
     public String toString() {
         return "\nManager Information\n" +
-                "First Name: " + getFirstName() + "\n" +
-                "Last Name: " + getLastName() +  "\n" +
+                "First Name: " + getName() + "\n" +
                 "SSN: " + getSsn() +  "\n" +
                 "Authorization: " + getAuthorization();
     }
