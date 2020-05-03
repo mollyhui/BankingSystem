@@ -15,10 +15,10 @@ public class AppDatabase {
         try {
             Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/BankDB?serverTimezone=UTC", "root", "591Nelson");
             PreparedStatement customerStatement = connection.prepareStatement(
-                    "CREATE TABLE BankDB.customers ( SSN char(9) PRIMARY KEY, password varchar(45), fName varchar(45), lName varchar(45), walletAmount double , creditScore int)");
+                    "CREATE TABLE BankDB.customers ( SSN char(9), password varchar(45), fName varchar(45), lName varchar(45), walletAmount double , creditScore int)");
             customerStatement.executeUpdate();
             PreparedStatement managerStatement = connection.prepareStatement(
-                    "CREATE TABLE BankDB.managers ( SSN char(9) PRIMARY KEY, password varchar(45), fName varchar(45), lName varchar(45))");
+                    "CREATE TABLE BankDB.managers ( SSN char(9), password varchar(45), fName varchar(45), lName varchar(45))");
             managerStatement.executeUpdate();
         } catch (SQLSyntaxErrorException e) {
             System.out.println("already initialized");
@@ -50,17 +50,17 @@ public class AppDatabase {
     }
 
 
-    public static void updateCustomerWallet(String ssn, double newValue) throws SQLException {
+    public static void updateCustomer(String ssn, String column, double newValue) throws SQLException {
         if (!initialized) {
             initialize();
         }
 
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/BankDB?serverTimezone=UTC", "root", "591Nelson");
-        PreparedStatement statement;
-        statement = connection.prepareStatement(
-                "UPDATE customers SET walletAmount = ? WHERE SSN = ?");
-        statement.setDouble(1, newValue);
-        statement.setString(2, ssn);
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE customers SET " + "? = ? WHERE SSN = ?");
+        statement.setString(1, column);
+        statement.setDouble(2, newValue);
+        statement.setString(3, ssn);
         statement.executeUpdate();
     }
 // process result set
