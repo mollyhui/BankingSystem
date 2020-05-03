@@ -12,17 +12,14 @@ public class AppDatabase {
         if (!initialized) {
             initialize();
         }
-        try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/BankDB?serverTimezone=UTC", "root", "591Nelson");
-            PreparedStatement customerStatement = connection.prepareStatement(
-                    "CREATE TABLE BankDB.customers ( SSN char(9), password varchar(45), fName varchar(45), lName varchar(45), walletAmount double , creditScore int)");
-            customerStatement.executeUpdate();
-            PreparedStatement managerStatement = connection.prepareStatement(
-                    "CREATE TABLE BankDB.managers ( SSN char(9), password varchar(45), fName varchar(45), lName varchar(45))");
-            managerStatement.executeUpdate();
-        } catch (SQLSyntaxErrorException e) {
-            System.out.println("already initialized");
-        }
+
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/BankDB?serverTimezone=UTC", "root", "591Nelson");
+        PreparedStatement customerStatement = connection.prepareStatement(
+                "CREATE TABLE BankDB.customers ( SSN char(9), password varchar(45), fName varchar(45), lName varchar(45), walletAmount double , creditScore int)");
+        customerStatement.executeUpdate();
+        PreparedStatement managerStatement = connection.prepareStatement(
+                "CREATE TABLE BankDB.managers ( SSN char(9), password varchar(45), fName varchar(45), lName varchar(45))");
+        managerStatement.executeUpdate();
 
     }
 
