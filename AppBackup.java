@@ -14,6 +14,8 @@ public class AppBackup {
             System.out.println(customerAccountExists("45676543456", "checkings"));
             System.out.println(customerAccountExists("45676543456", "savings"));
             System.out.println(customerAccountExists("45676543456", "security"));
+        } else if (args[0].equals("e")) {
+            System.out.println(customerLoanExists("45676543456"));
         }
     }
     // csv file Customer column structure:
@@ -33,9 +35,9 @@ public class AppBackup {
      *  DONE createManager
      *  DONE authenticate customer
      *  DONE authenticate manager
-     *  accountExists (Checking , Saving, Sec)
+     *  DONE accountExists (Checking , Saving, Sec)
      *  addAccount (Checking , Saving, Sec)
-     *  loanExists
+     *  DONE loanExists
      *  addLoan
      *  payLoan
      *
@@ -169,4 +171,21 @@ public class AppBackup {
         }
         return accountExists;
     }
+
+    public static boolean customerLoanExists(String ssn) throws IOException {
+        boolean loanExists = false;
+
+        BufferedReader csvReader = new BufferedReader(new FileReader("customerData.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0].equals(ssn)) {
+                if (!data[14].equals("null")) {
+                    loanExists = true;
+                }
+            }
+        }
+        return loanExists;
+    }
+
 }
