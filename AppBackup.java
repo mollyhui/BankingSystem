@@ -8,6 +8,8 @@ public class AppBackup {
             System.out.println(authenticateUser("manager", "45678765", "3999"));
         } else if (args[0].equals("b")) {
             createCustomer("555699876", "pw6969", "Christine Poppy", 799);
+        } else if (args[0].equals("c")) {
+            createManager("92284732", "pwokok", "NelsonBobby");
         }
     }
     // csv file Customer column structure:
@@ -87,5 +89,20 @@ public class AppBackup {
         }
     }
 
+    public static void createManager(String ssn, String password, String name) throws Exception {
+        if (userExists("manager", ssn)) {
+            throw new Exception();
+        } else {
+            FileWriter csvWriter = new FileWriter("managerData.txt", true);
+            csvWriter.append(ssn);
+            csvWriter.append(",");
+            csvWriter.append(password);
+            csvWriter.append(",");
+            csvWriter.append(name);
+            csvWriter.append("\n");
+            csvWriter.flush();
+            csvWriter.close();
+        }
+    }
 
 }
