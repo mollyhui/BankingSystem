@@ -58,24 +58,16 @@ public class AppBackup {
             System.out.println(getUserAttribute("6", "manager", 1));
         } else if (args[0].equals("k")) {
             updateUserAttribute("6", "manager", 1, "change1");
+        } else if (args[0].equals("l")) {
+            addLoan("45676543456", 299000, 12, 2.5, 12);
         }
 
 
 
     }
-    // CUSTOMER
-    //
-    // [0]SSN, [1]password, [2]name, [3]C-AccNumber, [4]C-Balance, [5]C-transFee, [6]Sav-AccNumber, [7]Sav-Balance,
-    // [8]Sav-transFee, [9]Sav-Interest, [10]Sec-AccNumber, [11]Sec-Balance, [12]Sec-transFee, [13]Loan-amount, [14]Loan-term,
-    // [15]Loan-Interest, [16]Loan-UnpaidMonths
-    //
-    // MANAGER
-    //
-    // [0]SSN, [1]password, [2]name, [3]balance
 
     /**
      * methods to have:
-     *  NOT NEEDED create CSV files - blank files will be provided (customerData.txt, managerData.txt)
      *
      *  DONE GET Method for all attributes given SSN (customer and manager)
      *  DONE update Method for all attributes given SSN (customer and manager)
@@ -86,8 +78,7 @@ public class AppBackup {
      *  DONE accountExists (Checking , Saving, Sec)
      *  DONE addAccount (Checking , Saving, Sec)
      *  DONE loanExists
-     *  addLoan
-     *  payLoan
+     *  DONE addLoan
      *  DONE delete user from file
      *
      */
@@ -421,6 +412,40 @@ public class AppBackup {
         csvWriter.close();
     }
 
+
+    public static void addLoan(String ssn, double amount, int term, double interest, int unpaidMonths) throws Exception {
+        if (!userExists("customer", ssn)) {
+            throw new Exception("customer does not exist");
+        }
+        String[] userData = new String[numberOfCustomerColumns]; // prepare original user data
+
+        BufferedReader csvReader = new BufferedReader(new FileReader("customerData.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[customerSSNIndex].equals(ssn)) {
+                userData = data;
+            }
+        }
+        // now we have the original user data
+        // now update the data to include loan info
+        userData[loanAmountIndex] = Double.toString(amount);
+        userData[loanTermIndex] = Integer.toString(term);
+        userData[loanInterestIndex] = Double.toString(interest);
+        userData[loanUnpaidMonthsIndex] = Integer.toString(unpaidMonths);
+
+        deleteUserFromFile(ssn, "customer");
+        FileWriter csvWriter = new FileWriter("customerData.txt", true);
+        for (int i=0; i<userData.length; i++) {
+            csvWriter.append(userData[i]);
+            if (i != userData.length-1) {
+                csvWriter.append(",");
+            }
+        }
+        csvWriter.append("\n");
+        csvWriter.flush();
+        csvWriter.close();
+    }
 
     /**
      * helper method used for replacing row in txt file

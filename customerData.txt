@@ -3,4 +3,4 @@
 35676543458,pw6969,SammyTo3,null,change,null,null,null,null,null,null,null,null,null,null,null,null
 45676543457,pw6969,SammyTo2,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 45676543458,pw6969,SammyTo3,null,null,null,null,null,null,null,null,null,null,null,null,null,null
-45676543456,pw6969,SammyTo,56785678,556.26,2.75,56785678,1987.0,2.45,1.9,56785678,1000.0,9.9,null,null,null,null
+45676543456,pw6969,SammyTo,56785678,556.26,2.75,56785678,1987.0,2.45,1.9,56785678,1000.0,9.9,299000.0,12,2.5,12
