@@ -28,24 +28,30 @@ public class AppBackup {
             addSavingsAccount("45676543457", "56785678", 1987, 2.45, 1.9);
         } else if (args[0].equals("i")) {
             addSecurityAccount("45676543457", "56785678", 1000, 9.9);
+        } else if (args[0].equals("j")) {
+            System.out.println(getUserAttribute("45676543457", "customer", 4));
+            System.out.println(getUserAttribute("6", "manager", 1));
         }
 
 
 
     }
-    // csv file Customer column structure:
-    // SSN, password, name, C-AccNumber, C-Balance, C-transFee, Sav-AccNumber, Sav-Balance, Sav-transFee, Sav-Interest, Sec-AccNumber, Sec-Balance, Sec-transFee, Loan-amount, Loan-term, Loan-Interest, Loan-UnpaidMonths
+    // CUSTOMER
     //
-    // csv file Manager column structure:
-    // SSN, password, name, balance
+    // [0]SSN, [1]password, [2]name, [3]C-AccNumber, [4]C-Balance, [5]C-transFee, [6]Sav-AccNumber, [7]Sav-Balance,
+    // [8]Sav-transFee, [9]Sav-Interest, [10]Sec-AccNumber, [11]Sec-Balance, [12]Sec-transFee, [13]Loan-amount, [14]Loan-term,
+    // [15]Loan-Interest, [16]Loan-UnpaidMonths
+    //
+    // MANAGER
+    //
+    // [0]SSN, [1]password, [2]name, [3]balance
 
     /**
      * methods to have:
-     *  X create CSV files - called in GUI code?
-     *  X delete CSV files
+     *  NOT NEEDED create CSV files - blank files will be provided (customerData.txt, managerData.txt)
      *
-     *  get Method for all attributes given SSN (customer and manager)
-     *  mutate Method for all attributes given SSN (customer and manager)
+     *  DONE GET Method for all attributes given SSN (customer and manager)
+     *  update Method for all attributes given SSN (customer and manager)
      *  DONE createCustomer
      *  DONE createManager
      *  DONE authenticate customer
@@ -311,6 +317,28 @@ public class AppBackup {
         csvWriter.append("\n");
         csvWriter.flush();
         csvWriter.close();
+    }
+
+    public static String getUserAttribute(String ssn, String managerOrCustomer, int indexOAttribute) throws Exception {
+        if (!userExists("customer", ssn) && (!userExists("manager", ssn))) {
+            throw new Exception("User does not exist");
+        }
+
+        BufferedReader csvReader;
+        if (managerOrCustomer == "manager") {
+            csvReader = new BufferedReader(new FileReader("managerData.txt"));
+        } else {
+            csvReader = new BufferedReader(new FileReader("customerData.txt"));
+        }
+
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0].equals(ssn)) {
+                return data[indexOAttribute];
+            }
+        }
+        return "not found";
     }
 
 
