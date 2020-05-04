@@ -1,6 +1,6 @@
 public class ClassTester {
     public static void main (String [] args) throws Exception {
-        Customer nelson = new Customer("Nelson", "Mei", "123456789", "1234", 1000, 800);
+        Customer nelson = new Customer("NelsonMei", "123456789", "1234", 1000, 800);
         nelson.addBankAccount("Checking", new Checking(1000));
         nelson.addBankAccount("Saving", new Saving(7000));
         nelson.addBankAccount("Security", new SecurityAccount(0));
@@ -14,7 +14,7 @@ public class ClassTester {
 //        System.out.println("New saving account: " + "\n" + nelson.getAccount("Saving"));
 //        
         
-        Manager amber = new Manager("Amber", "Sun", "999999999", "7890");
+        Manager amber = new Manager("AmberSun", "999999999", "7890");
         LoanApplication application = new LoanApplication(nelson, 800000, 36);
 
         System.out.println(nelson);
