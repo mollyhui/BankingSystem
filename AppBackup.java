@@ -8,7 +8,9 @@ public class AppBackup {
             System.out.println(authenticateUser("customer", "123456789", "pw123"));
             System.out.println(authenticateUser("manager", "45678765", "3999"));
         } else if (args[0].equals("b")) {
-            createCustomer("45676543456", "pw6969", "SammyTo", 799);
+            createCustomer("45676543456", "pw6969", "SammyTo");
+            createCustomer("45676543457", "pw6969", "SammyTo2");
+            createCustomer("45676543458", "pw6969", "SammyTo3");
         } else if (args[0].equals("c")) {
             createManager("92284732", "pwokok", "NelsonBobby", 10);
         } else if (args[0].equals("d")) {
@@ -21,12 +23,18 @@ public class AppBackup {
             deleteUserFromFile("5", "customer");
             deleteUserFromFile("5", "manager");
         } else if (args[0].equals("g")) {
-            addCheckingsAccount("45676543455", "56785678", 556.26, 2.75);
+            addCheckingsAccount("45676543457", "56785678", 556.26, 2.75);
+        } else if (args[0].equals("h")) {
+            addSavingsAccount("45676543457", "56785678", 1987, 2.45, 1.9);
+        } else if (args[0].equals("i")) {
+            addSecurityAccount("45676543457", "56785678", 1000, 9.9);
         }
+
+
 
     }
     // csv file Customer column structure:
-    // SSN, password, name, credit score, C-AccNumber, C-Balance, C-transFee, Sav-AccNumber, Sav-Balance, Sav-transFee, Sav-Interest, Sec-AccNumber, Sec-Balance, Sec-transFee, Loan-amount, Loan-term, Loan-Interest, Loan-UnpaidMonths
+    // SSN, password, name, C-AccNumber, C-Balance, C-transFee, Sav-AccNumber, Sav-Balance, Sav-transFee, Sav-Interest, Sec-AccNumber, Sec-Balance, Sec-transFee, Loan-amount, Loan-term, Loan-Interest, Loan-UnpaidMonths
     //
     // csv file Manager column structure:
     // SSN, password, name, balance
@@ -43,7 +51,7 @@ public class AppBackup {
      *  DONE authenticate customer
      *  DONE authenticate manager
      *  DONE accountExists (Checking , Saving, Sec)
-     *  addAccount (Checking , Saving, Sec)
+     *  DONE addAccount (Checking , Saving, Sec)
      *  DONE loanExists
      *  addLoan
      *  payLoan
@@ -87,7 +95,7 @@ public class AppBackup {
     }
 
 
-    public static void createCustomer(String ssn, String password, String name, int creditScore) throws Exception {
+    public static void createCustomer(String ssn, String password, String name) throws Exception {
         if (userExists("customer", ssn)) {
             throw new Exception();
         } else {
@@ -97,8 +105,6 @@ public class AppBackup {
             csvWriter.append(password);
             csvWriter.append(",");
             csvWriter.append(name);
-            csvWriter.append(",");
-            csvWriter.append(Integer.toString(creditScore));
             csvWriter.append(",");
             csvWriter.append("null");
             csvWriter.append(",");
@@ -204,8 +210,11 @@ public class AppBackup {
     }
 
 
-    public static void addCheckingsAccount(String ssn, String accountNumber, double startingBalance, double transactionFee) throws IOException {
-        String[] userData = new String[18]; // prepare original user data
+    public static void addCheckingsAccount(String ssn, String accountNumber, double startingBalance, double transactionFee) throws Exception {
+        if (!userExists("customer", ssn)) {
+            throw new Exception("customer does not exist");
+        }
+        String[] userData = new String[17]; // prepare original user data
 
         BufferedReader csvReader = new BufferedReader(new FileReader("customerData.txt"));
         String row;
@@ -217,16 +226,84 @@ public class AppBackup {
         }
         // now we have the original user data
         // now update the data to include checkings account info
-        userData[4] = accountNumber;
-        userData[5] = Double.toString(startingBalance);
-        userData[6] = Double.toString(transactionFee);
+        userData[3] = accountNumber;
+        userData[4] = Double.toString(startingBalance);
+        userData[5] = Double.toString(transactionFee);
         //System.out.println(userData[4]);
 
         deleteUserFromFile(ssn, "customer");
         FileWriter csvWriter = new FileWriter("customerData.txt", true);
         for (int i=0; i<userData.length; i++) {
             csvWriter.append(userData[i]);
-            System.out.println(userData[i]);
+            if (i != userData.length-1) {
+                csvWriter.append(",");
+            }
+        }
+        csvWriter.append("\n");
+        csvWriter.flush();
+        csvWriter.close();
+    }
+
+
+    public static void addSavingsAccount(String ssn, String accountNumber, double startingBalance, double transactionFee, double interest) throws Exception {
+        if (!userExists("customer", ssn)) {
+            throw new Exception("customer does not exist");
+        }
+        String[] userData = new String[17]; // prepare original user data
+
+        BufferedReader csvReader = new BufferedReader(new FileReader("customerData.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0].equals(ssn)) {
+                userData = data;
+            }
+        }
+        // now we have the original user data
+        // now update the data to include savings account info
+        userData[6] = accountNumber;
+        userData[7] = Double.toString(startingBalance);
+        userData[8] = Double.toString(transactionFee);
+        userData[9] = Double.toString(interest);
+
+        deleteUserFromFile(ssn, "customer");
+        FileWriter csvWriter = new FileWriter("customerData.txt", true);
+        for (int i=0; i<userData.length; i++) {
+            csvWriter.append(userData[i]);
+            if (i != userData.length-1) {
+                csvWriter.append(",");
+            }
+        }
+        csvWriter.append("\n");
+        csvWriter.flush();
+        csvWriter.close();
+    }
+
+
+    public static void addSecurityAccount(String ssn, String accountNumber, double startingBalance, double transactionFee) throws Exception {
+        if (!userExists("customer", ssn)) {
+            throw new Exception("customer does not exist");
+        }
+        String[] userData = new String[17]; // prepare original user data
+
+        BufferedReader csvReader = new BufferedReader(new FileReader("customerData.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0].equals(ssn)) {
+                userData = data;
+            }
+        }
+        // now we have the original user data
+        // now update the data to include security account info
+        userData[10] = accountNumber;
+        userData[11] = Double.toString(startingBalance);
+        userData[12] = Double.toString(transactionFee);
+
+        deleteUserFromFile(ssn, "customer");
+        FileWriter csvWriter = new FileWriter("customerData.txt", true);
+        for (int i=0; i<userData.length; i++) {
+            csvWriter.append(userData[i]);
             if (i != userData.length-1) {
                 csvWriter.append(",");
             }
