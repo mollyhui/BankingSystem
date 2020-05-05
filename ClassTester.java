@@ -29,14 +29,17 @@ public class ClassTester {
         Manager amber = new Manager("Amber", "Sun", "999999999", "7890");
         LoanApplication application = new LoanApplication(nelson, 800000, 36);
 
-        //test manager set stock price -> update csv
+        //test manager set stock price 
         StockMarket stockMarket = new StockMarket();
         System.out.println("before set stock price: "+stockMarket.getStocks().get("Amazon").getPrice());
-        amber.setStockPrice("Amazon",100);
+        amber.getStockMarket().setStockPrice("Amazon",100);
         System.out.println("before set stock price: "+stockMarket.getStocks().get("Amazon").getPrice());
         
-        //test managet sell stock -> update csv
-        amber.deleteStock("Amazon");
+        //test managet delete stock
+        System.out.println("before delete stock: "+amber.getStockMarket().getStocks().values().toString());
+
+        amber.getStockMarket().deleteStock("Amazon");
+        System.out.println("after delete stock: "+amber.getStockMarket().getStocks().values().toString());
         
         //test customer buy stock: DONE
         System.out.println("Before buying stock, balance is: "+ nelson.getAccount("Security").getBalance());

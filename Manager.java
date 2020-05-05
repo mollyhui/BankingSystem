@@ -7,6 +7,10 @@ public class Manager extends User implements Serializable {
     Manager(String firstName, String lastName, String ssn, String password) {
         super(firstName, lastName, ssn, password);
     }
+    
+    public StockMarket getStockMarket() {
+    	return this.stockMarket;
+    }
 
     public String getAuthorization() {
         return "admin";

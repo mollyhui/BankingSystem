@@ -94,7 +94,6 @@ public class AppBackup {
      *  DONE addCustoerStock
      *  DONE custoemrStockExists
      *  
-     *  - update stock attribute 
      *  - delete stock from stockMarket
      *  - addTransactionRecord.csv
      *

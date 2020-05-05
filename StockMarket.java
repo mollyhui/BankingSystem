@@ -25,27 +25,11 @@ public class StockMarket {
         return this.stocks;
     }
 	
+	public void setStockPrice(String name, double price) {
+		this.getStocks().get(name).setPrice(price);
+	}
 	
-//	public Hashtable<String, Stock> addStocks() {
-//		Stock amazon = new Stock("Amazon", 20); 
-//        Stock facebook = new Stock("Facebook", 30); 
-//        Stock microsoft = new Stock("Microsoft", 40); 
-//        Stock google = new Stock("Google", 50); 
-//        
-//
-//        this.stocks.put("amazon", amazon); 
-//        this.stocks.put("facebook",facebook); 
-//        this.stocks.put("microsoft",microsoft); 
-//        this.stocks.put("google",google); 
-//		
-////		this.stocks = Arrays.asList(
-////			    Arrays.asList("Amazon", "20", "100"),
-////			    Arrays.asList("Facebook", "30", "200"),
-////			    Arrays.asList("Microsoft", "40", "150"),
-////			    Arrays.asList("Google", "50", "150")
-////			);
-//        
-//
-//        return stocks; 
-//	}
+	public void deleteStock(String name) {
+    	this.getStocks().remove(name);
+    }
 }

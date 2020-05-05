@@ -17,6 +17,9 @@ public class Stock {
 		return this.price;
 	}
 	
+
+	
+	
 //	public int getShares() {
 //		return this.shares;
 //	}
