@@ -4,6 +4,8 @@ public class User {
     private final String lastName;
     private final String ssn;
     private String password;
+    private double initialBalance;
+    
 
     public User(String firstName, String lastName, String ssn, String password) {
         this.firstName= firstName;

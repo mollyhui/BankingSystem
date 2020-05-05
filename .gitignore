@@ -12,3 +12,9 @@
 /InvalidAccountException.class
 /Security.class
 /SecurityAccount.class
+/Money.class
+/Currency.class
+/AppBackup.class
+/Stock.class
+/StockMarket.class
+/TooManyLoansException.class

@@ -7,6 +7,7 @@ public class Customer extends User implements Serializable{
     private double walletAmount;
     private int creditScore;
     private Loan loan = null;
+    private Hashtable<String, Stock> stocks = new Hashtable<String, Stock>();
     
     private Hashtable<String, Account> account = new Hashtable<String, Account>();
 
@@ -39,6 +40,44 @@ public class Customer extends User implements Serializable{
     public Account getAccount(String type) {
     	return this.account.get(type);
     }
+    
+    public Hashtable<String, Stock> getStocks(){
+    	return this.stocks;
+    }
+    
+    public void buyStock(String stockName) throws Exception {
+    	StockMarket market = new StockMarket();
+    	SecurityAccount security = (SecurityAccount) this.account.get("Security");
+    	if (security != null){// if customer has security account
+    		if (market.getStocks().containsKey(stockName)) {// if selected stock exists
+    			Stock stock = market.getStocks().get(stockName);
+    			if (security.getBalance() >= stock.getPrice()) {//if sufficient fund to buy stock
+    			this.stocks.put(stockName, stock);
+    			security.setBalance(security.getBalance()-stock.getPrice());
+    			}else {
+    				throw new InsufficientFundsException();
+    			}
+    		}else {
+    			System.out.println("No such stock");
+    		}
+    	}else {
+    		System.out.println("No security Account");
+    	}
+    }
+    
+    public void sellStock(String stockName) throws Exception{
+    	StockMarket market = new StockMarket();
+    	SecurityAccount security = (SecurityAccount) this.account.get("Security");
+    	if (this.getStocks().containsKey(stockName)) {// if selected stock exists
+    		Stock stock = this.getStocks().get(stockName);
+    		this.getStocks().remove(stockName); 
+    		security.setBalance(security.getBalance()+stock.getPrice());
+    	}else {
+    		System.out.println("No such stock");
+    		}
+    }
+    
+     
     
     public double getWalletAmount() {
         return walletAmount;

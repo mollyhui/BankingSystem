@@ -1,11 +1,12 @@
 import java.io.Serializable;
 
-public abstract class Account  implements Serializable{
+public abstract class Account implements Serializable{
     private double balance = 0;
     private double interest = 0;
     private int accountNumber;
     private static int numberOfAccounts = 1000000;
     private double transactionFee;
+	
     
     Account(){
         this.accountNumber = getNextAccountNumber();
@@ -41,14 +42,17 @@ public abstract class Account  implements Serializable{
         this.interest = interest;
     }
     
-    public void withdraw(double amount) throws InsufficientFundsException{
-        if(amount + transactionFee > balance){
+    public void withdraw(double money) throws InsufficientFundsException{
+    	//TODO: update manager's balance(transaction fee, interest)
+        if(money+ transactionFee > balance){
             throw new InsufficientFundsException();
         }
-        balance -= amount + transactionFee;
+        balance -= money+ transactionFee;
+       // Manager manager = new Manager();
     }
     
     public void deposit(double amount) throws InvalidAmountException{
+    	//TODO: update manager's balance(transaction fee, interest)
         if(amount <= 0){
             throw new InvalidAmountException();
         }
@@ -57,11 +61,14 @@ public abstract class Account  implements Serializable{
     }
     
     public void transfer(Account account, double amount) throws Exception{
+    	//TODO: update manager's balance(transaction fee, interest)
+    	//Manager manager = new Manager();
 		if(amount + this.getTransactionFee() > this.getBalance()){
             throw new InsufficientFundsException();
         }else{
         	this.setBalance(this.getBalance()-amount-this.getTransactionFee());
         	account.setBalance(account.getBalance() + amount);
+        	//manager.setBalance(this.getTransactionFee());
         }
 	}
 

@@ -10,6 +10,7 @@ public class SecurityAccount extends Account{
 		public String getAccountType() {
 	        return accountType;
 	    }
+		
 	    
 	    @Override
 	    public String toString(){

@@ -29,6 +29,13 @@ public class Saving extends Account{
 				this.setBalance(this.getBalance()-amount-this.getTransactionFee());
 	        	account.setBalance(account.getBalance() + amount);
 			}
+		}else {
+			if(amount + this.getTransactionFee() > this.getBalance()){
+	            throw new InsufficientFundsException();
+	        }else{
+	        	this.setBalance(this.getBalance()-amount-this.getTransactionFee());
+	        	account.setBalance(account.getBalance() + amount);
+	        }
 		}
 	}
     

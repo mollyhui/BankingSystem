@@ -3,7 +3,7 @@ public class ClassTester {
         Customer nelson = new Customer("Nelson", "Mei", "123456789", "1234", 1000, 800);
         nelson.addBankAccount("Checking", new Checking(1000));
         nelson.addBankAccount("Saving", new Saving(7000));
-        nelson.addBankAccount("Security", new SecurityAccount(0));
+        nelson.addBankAccount("Security", new SecurityAccount(1110));
         
 //        System.out.println("Original security account: " + "\n" + nelson.getAccount("Security"));
 //        System.out.println("Original saving account: " + "\n" + nelson.getAccount("Saving"));
@@ -13,17 +13,52 @@ public class ClassTester {
 //        System.out.println("New security account: " + "\n" + nelson.getAccount("Security"));
 //        System.out.println("New saving account: " + "\n" + nelson.getAccount("Saving"));
 //        
-        
+//	      System.out.println("Original Saving account: " + "\n" + nelson.getAccount("Saving"));
+//	      System.out.println("Original Checking account: " + "\n" + nelson.getAccount("Checking"));
+//	      Saving saving = (Saving) nelson.getAccount("Saving");
+//	      Checking checking = (Checking) nelson.getAccount("Checking");
+//	      saving.transfer(checking, 1000);
+//	      System.out.println("New Saving account: " + "\n" + nelson.getAccount("Saving"));
+//	      System.out.println("New Checking account: " + "\n" + nelson.getAccount("Checking"));
+
+//        System.out.println("Original Security account: " + "\n" + nelson.getAccount("Security"));
+//        SecurityAccount security = (SecurityAccount) nelson.getAccount("security");
+//        security.buyStock(new Stock("Amazon", 20,100), 20);
+//	    System.out.println("New Security account: " + "\n" + nelson.getAccount("Security"));
+	      
         Manager amber = new Manager("Amber", "Sun", "999999999", "7890");
         LoanApplication application = new LoanApplication(nelson, 800000, 36);
 
+        //test manager set stock price -> update csv
+        StockMarket stockMarket = new StockMarket();
+        System.out.println("before set stock price: "+stockMarket.getStocks().get("Amazon").getPrice());
+        amber.setStockPrice("Amazon",100);
+        System.out.println("before set stock price: "+stockMarket.getStocks().get("Amazon").getPrice());
+        
+        //test managet sell stock -> update csv
+        amber.deleteStock("Amazon");
+        
+        //test customer buy stock: DONE
+        System.out.println("Before buying stock, balance is: "+ nelson.getAccount("Security").getBalance());
+        nelson.buyStock("Amazon");
+        System.out.println("After buying stock, balance is: "+ nelson.getAccount("Security").getBalance());
+        System.out.println(nelson.getStocks().values().toString());
+        
+        //test customer sell stock: DONE
+        System.out.println("Before selling stock, balance is: "+ nelson.getAccount("Security").getBalance());
+        nelson.sellStock("Amazon");
+        System.out.println("After selling stock, balance is: "+ nelson.getAccount("Security").getBalance());
+        System.out.println(nelson.getStocks().values().toString());
+        
+        //test customer sell stock
+        
         System.out.println(nelson);
         System.out.println(nelson.getAccount("Checking"));
         System.out.println(nelson.getAccount("Saving"));
         System.out.println(nelson.getAccount("Security"));
         System.out.println(amber);
-        System.out.println(application.qualify());
-        Loan loan = new Loan(800000, 36, 5);
-        System.out.println(loan.getMonthlyPayment());
+//        System.out.println(application.qualify());
+//        Loan loan = new Loan(800000, 36, 5);
+//        System.out.println(loan.getMonthlyPayment());
     }
 }
