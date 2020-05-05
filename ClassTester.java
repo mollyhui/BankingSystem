@@ -30,10 +30,9 @@ public class ClassTester {
         LoanApplication application = new LoanApplication(nelson, 800000, 36);
 
         //test manager set stock price 
-        StockMarket stockMarket = new StockMarket();
-        System.out.println("before set stock price: "+stockMarket.getStocks().get("Amazon").getPrice());
+        System.out.println("before set stock price: "+amber.getStockMarket().getStocks().get("Amazon").getPrice());
         amber.getStockMarket().setStockPrice("Amazon",100);
-        System.out.println("before set stock price: "+stockMarket.getStocks().get("Amazon").getPrice());
+        System.out.println("after set stock price: "+amber.getStockMarket().getStocks().get("Amazon").getPrice());
         
         //test managet delete stock
         System.out.println("before delete stock: "+amber.getStockMarket().getStocks().values().toString());
@@ -41,15 +40,15 @@ public class ClassTester {
         amber.getStockMarket().deleteStock("Amazon");
         System.out.println("after delete stock: "+amber.getStockMarket().getStocks().values().toString());
         
-        //test customer buy stock: DONE
+        //test customer buy stock
         System.out.println("Before buying stock, balance is: "+ nelson.getAccount("Security").getBalance());
-        nelson.buyStock("Amazon");
+        nelson.buyStock("Amazon",2);
         System.out.println("After buying stock, balance is: "+ nelson.getAccount("Security").getBalance());
         System.out.println(nelson.getStocks().values().toString());
         
-        //test customer sell stock: DONE
+        //test customer sell stock
         System.out.println("Before selling stock, balance is: "+ nelson.getAccount("Security").getBalance());
-        nelson.sellStock("Amazon");
+        nelson.sellStock("Amazon",2);
         System.out.println("After selling stock, balance is: "+ nelson.getAccount("Security").getBalance());
         System.out.println(nelson.getStocks().values().toString());
         

@@ -45,7 +45,7 @@ public class Customer extends User implements Serializable{
     	return this.stocks;
     }
     
-    public void buyStock(String stockName) throws Exception {
+    public void buyStock(String stockName, int shares) throws Exception {
     	StockMarket market = new StockMarket();
     	SecurityAccount security = (SecurityAccount) this.account.get("Security");
     	if (security != null){// if customer has security account
@@ -53,7 +53,7 @@ public class Customer extends User implements Serializable{
     			Stock stock = market.getStocks().get(stockName);
     			if (security.getBalance() >= stock.getPrice()) {//if sufficient fund to buy stock
     			this.stocks.put(stockName, stock);
-    			security.setBalance(security.getBalance()-stock.getPrice());
+    			security.setBalance(security.getBalance()-shares*stock.getPrice());
     			}else {
     				throw new InsufficientFundsException();
     			}
@@ -65,13 +65,13 @@ public class Customer extends User implements Serializable{
     	}
     }
     
-    public void sellStock(String stockName) throws Exception{
+    public void sellStock(String stockName, int shares) throws Exception{
     	StockMarket market = new StockMarket();
     	SecurityAccount security = (SecurityAccount) this.account.get("Security");
     	if (this.getStocks().containsKey(stockName)) {// if selected stock exists
     		Stock stock = this.getStocks().get(stockName);
     		this.getStocks().remove(stockName); 
-    		security.setBalance(security.getBalance()+stock.getPrice());
+    		security.setBalance(security.getBalance()+shares*stock.getPrice());
     	}else {
     		System.out.println("No such stock");
     		}
