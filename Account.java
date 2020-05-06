@@ -6,6 +6,7 @@ public abstract class Account implements Serializable{
     private int accountNumber;
     private static int numberOfAccounts = 1000000;
     private double transactionFee;
+
 	
     
     Account(){
@@ -43,16 +44,18 @@ public abstract class Account implements Serializable{
     }
     
     public void withdraw(double money) throws InsufficientFundsException{
-    	//TODO: update manager's balance(transaction fee, interest)
-        if(money+ transactionFee > balance){
+    	//update manager's balance(transaction fee, interest)
+        //double manager_balance = AppBackup.getBalanceOfManagers();
+        //AppBackup.changeAttributeOfAll("manager", 3, this.transactionFee + manager_balance);
+        if(money+ this.transactionFee > balance){
             throw new InsufficientFundsException();
         }
-        balance -= money+ transactionFee;
-       // Manager manager = new Manager();
+        balance -= money+this.transactionFee;
     }
     
     public void deposit(double amount) throws InvalidAmountException{
-    	//TODO: update manager's balance(transaction fee, interest)
+        //double manager_balance = AppBackup.getBalanceOfManagers();
+    	//update manager's balance(transaction fee, interest)
         if(amount <= 0){
             throw new InvalidAmountException();
         }

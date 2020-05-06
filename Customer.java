@@ -8,6 +8,8 @@ public class Customer extends User implements Serializable{
     private int creditScore;
     private Loan loan = null;
     private Hashtable<String, Stock> stocks = new Hashtable<String, Stock>();
+    //private AppBackup backup;
+    
     
     private Hashtable<String, Account> account = new Hashtable<String, Account>();
 
@@ -53,6 +55,7 @@ public class Customer extends User implements Serializable{
     			Stock stock = market.getStocks().get(stockName);
     			if (security.getBalance() >= stock.getPrice()) {//if sufficient fund to buy stock
     			this.stocks.put(stockName, stock);
+                //this.backup.createCustomerStock(this.getSsn(), stock.getName(), stock.getPrice());// update customer stock in csv
     			security.setBalance(security.getBalance()-shares*stock.getPrice());
     			}else {
     				throw new InsufficientFundsException();
@@ -71,6 +74,7 @@ public class Customer extends User implements Serializable{
     	if (this.getStocks().containsKey(stockName)) {// if selected stock exists
     		Stock stock = this.getStocks().get(stockName);
     		this.getStocks().remove(stockName); 
+    		//this.backup.deleteStockFromCustomerStock(this.getSsn(), stockName);//update csv
     		security.setBalance(security.getBalance()+shares*stock.getPrice());
     	}else {
     		System.out.println("No such stock");

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class AppBackup {
 
-    static int numberOfCustomerColumns = 19;
+    static int numberOfCustomerColumns = 17;
     static int numberOfManagerColumns = 4;
 
     static int customerSSNIndex = 0;
@@ -25,17 +25,22 @@ public class AppBackup {
     static int loanTermIndex = 14;
     static int loanInterestIndex = 15;
     static int loanUnpaidMonthsIndex = 16;
-    static int customerstockNameIndex = 17;
-    static int stockSharesIndex = 18;
+
     
     static int managerSSNIndex = 0;
     static int managerPasswordIndex = 1;
     static int managerNameIndex = 2;
     static int managerBalanceIndex = 3;
     
-    static int numberOfStocksColumns = 2;
+    static int numberOfCustomerStocksColumns = 3;
+    static int ssnIndex = 0;
+    static int customerstockNameIndex = 1;
+    static int stockSharesIndex = 2;
+    
+    static int numberOfStocksColumns= 2;
     static int stockNameIndex = 0;
-    static int stockPriceindex = 1;
+    static int stockPriceIndex = 1;
+     
     
 
     public static void main(String[] args) throws IOException, Exception {
@@ -71,8 +76,23 @@ public class AppBackup {
             addLoan("45676543456", 299000, 12, 2.5, 12);
         }
 
+        //test stocks
+        else if (args[0].equals("v")) {
+            createCustomerStock("45676543456", "Amazon", 100);
+            createCustomerStock("45676543457", "Google", 50);
+            deleteStockFromCustomerStock("45676543457","Amazon");
+            updateCustomerStockAttribute("45676543456", "Amazon", 2, "66");
+            System.out.println( getCustomerStockAttribute("45676543456", 1));
+        }
 
-
+        else if (args[0].equals("s")) {
+            createStockMarket("Amazon", 100);
+            createStockMarket("Google", 50);
+            deleteStockFromMarket("Google");
+            updateStockAttribute("Amazon", 1, "88");
+            System.out.println(getStockAttribute("Amazon", 1));
+            
+        }
     }
 
     /**
@@ -90,10 +110,18 @@ public class AppBackup {
      *  DONE addLoan
      *  DONE delete user from file
      *  
-     *  DONE addStockMarket
-     *  DONE addCustoerStock
-     *  DONE custoemrStockExists
-     *  -addTransactionRecord.csv
+     *  
+     *  DONE createStockMarket
+     *  DONE deleteStockFromMarket
+     *  DONE updateStockAttribute
+     *  DONE getStockAttribute
+     *  
+     *  DONE createCustomerStock
+     *  DONE deleteStockFromCustomerStock
+     *  DONE updateCustomerStockAttribute
+     *  DONE getCustomerStockAttribute
+     *  
+     *  TODO addTransactionRecord.csv with date
      *
      */
 
@@ -171,10 +199,6 @@ public class AppBackup {
             csvWriter.append("null");
             csvWriter.append(",");
             csvWriter.append("null");
-            csvWriter.append(",");
-            csvWriter.append("null");
-            csvWriter.append(",");
-            csvWriter.append("null");
             csvWriter.append("\n");
             csvWriter.flush();
             csvWriter.close();
@@ -199,6 +223,74 @@ public class AppBackup {
             csvWriter.close();
         }
     }
+
+    public static double getBalanceOfManagers() throws IOException {
+        BufferedReader csvReader = new BufferedReader(new FileReader("managerData.txt"));
+        int balance = 0;
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            balance = Integer.parseInt(data[managerBalanceIndex]);
+            break;
+        }
+        return balance;
+}
+    
+    public static void createCustomerStock(String ssn, String stockName, double price) throws Exception{
+    	if (!userExists("customer", ssn)) {
+            throw new Exception("user not exists");
+        }else {
+            FileWriter csvWriter = new FileWriter("customerStock.txt", true);
+            csvWriter.append(ssn);
+            csvWriter.append(",");
+            csvWriter.append(stockName);
+            csvWriter.append(",");
+            csvWriter.append(Double.toString(price));
+            csvWriter.append("\n");
+            csvWriter.flush();
+            csvWriter.close();
+        }
+    	
+    }
+
+    public static void createStockMarket(String name, double price) throws Exception{
+        FileWriter csvWriter = new FileWriter("StockMarket.txt", true);
+            csvWriter.append(name);
+            csvWriter.append(",");
+            csvWriter.append(Double.toString(price));
+            csvWriter.append("\n");
+            csvWriter.flush();
+            csvWriter.close();
+
+    }
+
+
+    public static void deleteStockFromMarket(String name) throws IOException{
+        ArrayList<String[]> putBack = new ArrayList<>(); // data not to be deleted
+        String row;
+        BufferedReader csvReader = new BufferedReader(new FileReader("StockMarket.txt"));
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (!(data[stockNameIndex].compareTo(name) == 0)) {
+                putBack.add(data);
+            }
+        }
+        //now we have all line we still want, now we clear the file and put stuff back in
+        FileWriter csvWriter = new FileWriter("StockMarket.txt", false);
+        csvWriter.append("");
+        for (String[] rowData: putBack) {
+        for (int i=0; i<rowData.length; i++) {
+            csvWriter.append(rowData[i]);
+            if (i != rowData.length-1) {
+                csvWriter.append(",");
+            }
+        }
+        csvWriter.append("\n");
+        }
+      csvWriter.flush();
+      csvWriter.close();
+    }
+
 
 
     public static boolean customerAccountExists(String ssn, String accountType) throws IOException {
@@ -250,45 +342,52 @@ public class AppBackup {
         }
         return loanExists;
     }
-    
-    public static boolean customerStockExists(String ssn) throws IOException{
-    	boolean stockExists = false;
 
-        BufferedReader csvReader = new BufferedReader(new FileReader("customerData.txt"));
+
+    public static void deleteStockFromCustomerStock(String ssn,String stockName) throws IOException {
+    	ArrayList<String[]> putBack = new ArrayList<>(); // data not to be deleted
+    	String row;
+    	BufferedReader csvReader = new BufferedReader(new FileReader("customerStock.txt"));
+	    while ((row = csvReader.readLine()) != null) {
+	        String[] data = row.split(",");
+	        if (! data[ssnIndex].equals(ssn) && (!(data[customerstockNameIndex].compareTo(stockName) == 0))) {
+	            putBack.add(data);
+	        }
+	    }
+	    // now we have all line we still want, now we clear the file and put stuff back in
+	    FileWriter csvWriter = new FileWriter("customerStock.txt", false);
+	    csvWriter.append("");
+	    for (String[] rowData: putBack) {
+        for (int i=0; i<rowData.length; i++) {
+            csvWriter.append(rowData[i]);
+            if (i != rowData.length-1) {
+                csvWriter.append(",");
+            }
+        }
+        csvWriter.append("\n");
+	    }
+      csvWriter.flush();
+      csvWriter.close();
+    	
+    }
+    
+    public static void updateCustomerStockAttribute(String ssn, String stockName, int indexOAttribute, String newValue) throws Exception {
+        if (!userExists("customer", ssn)) {
+            throw new Exception("User does not exist");
+        }
+        String[] userData = new String[numberOfCustomerStocksColumns]; // prepare original user data
+        BufferedReader csvReader = new BufferedReader(new FileReader("customerStock.txt"));
         String row;
         while ((row = csvReader.readLine()) != null) {
             String[] data = row.split(",");
-            if (data[customerSSNIndex].equals(ssn)) {
-                if (!data[stockSharesIndex].equals("null")) {
-                	stockExists = true;
-                }
-            }
-        }
-        return stockExists;
-    }
-    
-    public static void addCustomerStock(String ssn, String name, int shares) throws Exception {
-    	if (!userExists("customer", ssn)) {
-            throw new Exception("customer does not exist");
-        }
-        String[] userData = new String[numberOfCustomerColumns]; // prepare original user data
-
-        BufferedReader csvReader = new BufferedReader(new FileReader("customerData.txt"));
-        String row;
-        while ((row = csvReader.readLine()) != null) {
-            String[]data = row.split(",");
-            if (data[customerSSNIndex].equals(ssn)) {
+            if (data[ssnIndex].equals(ssn)) {
                 userData = data;
             }
         }
-        // now we have the original user data
-        // now update the data to include stock info
-        userData[customerstockNameIndex] = name;
-        userData[stockSharesIndex] = Integer.toString(shares);
-        
-
-        deleteUserFromFile(ssn, "customer");
-        FileWriter csvWriter = new FileWriter("customerData.txt", true);
+        // now update the data to reflect new value
+        userData[indexOAttribute] = newValue;
+        deleteStockFromCustomerStock(ssn,stockName);
+        FileWriter csvWriter = new FileWriter("customerStock.txt", true);
         for (int i=0; i<userData.length; i++) {
             csvWriter.append(userData[i]);
             if (i != userData.length-1) {
@@ -299,7 +398,57 @@ public class AppBackup {
         csvWriter.flush();
         csvWriter.close();
     }
+    public static void updateStockAttribute(String stockName, int indexOAttribute, String newValue) throws Exception{
+        String[] userData = new String[numberOfStocksColumns];
+        BufferedReader csvReader = new BufferedReader(new FileReader("StockMarket.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[stockNameIndex].compareTo(stockName) == 0) {
+                userData = data;
+            }
+        }
+        userData[indexOAttribute] = newValue;
+        deleteStockFromMarket(stockName);
+        FileWriter csvWriter = new FileWriter("StockMarket.txt", true);
+        for (int i=0; i<userData.length; i++) {
+            csvWriter.append(userData[i]);
+            if (i != userData.length-1) {
+                csvWriter.append(",");
+            }
+        }
+        csvWriter.append("\n");
+        csvWriter.flush();
+        csvWriter.close();
+    }
+    
+    public static String getCustomerStockAttribute(String ssn, int indexOAttribute) throws Exception {
+        if (!userExists("customer", ssn)) {
+            throw new Exception("User does not exist");
+        }
 
+        BufferedReader csvReader = new BufferedReader(new FileReader("customerStock.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0].equals(ssn)) {
+                return data[indexOAttribute];
+            }
+        }
+        return "not found";
+    }
+
+    public static String getStockAttribute(String name, int indexOAttribute) throws Exception{
+        BufferedReader csvReader = new BufferedReader(new FileReader("StockMarket.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[0].equals(name)) {
+                return data[indexOAttribute];
+            }
+        }
+        return "not found";
+    }
 
     public static void addCheckingsAccount(String ssn, String accountNumber, double startingBalance, double transactionFee) throws Exception {
         if (!userExists("customer", ssn)) {
@@ -403,24 +552,6 @@ public class AppBackup {
         csvWriter.close();
     }
     
-    public static void addStockMarket() throws Exception {
-    	StockMarket market = new StockMarket();
-    	Hashtable<String, Stock> stocks = market.getStocks();
-    	FileWriter csvWriter = new FileWriter("Stocks.csv");
-    	csvWriter.append("Name");
-    	csvWriter.append(",");
-    	csvWriter.append("Price");
-    	csvWriter.append("\n");
-    	
-    	for (Stock stock: stocks.values()) {
-    	    csvWriter.append(String.join(",", stock.toString()));
-    	    csvWriter.append("\n");
-    	}
-
-    	csvWriter.flush();
-    	csvWriter.close();
-    	System.out.println(csvWriter);
-    }
 
     public static String getUserAttribute(String ssn, String managerOrCustomer, int indexOAttribute) throws Exception {
         if (!userExists("customer", ssn) && (!userExists("manager", ssn))) {
@@ -497,6 +628,26 @@ public class AppBackup {
         csvWriter.flush();
         csvWriter.close();
     }
+
+    public static void changeAttributeOfAll(String customerOrManager, int indexOfAttribute, String newValue) throws Exception {
+    // get all SSN
+    BufferedReader csvReader;
+    if (customerOrManager == "manager") {
+        csvReader = new BufferedReader(new FileReader("managerData.txt"));
+    } else {
+        csvReader = new BufferedReader(new FileReader("customerData.txt"));
+    }
+    ArrayList<String> allSSN = new ArrayList<>();
+    String row;
+    while ((row = csvReader.readLine()) != null) {
+        String[] data = row.split(",");
+        allSSN.add(data[0]);
+    }
+    // do the change
+    for (String ssn: allSSN) {
+        updateUserAttribute(ssn, customerOrManager, indexOfAttribute, newValue);
+    }
+}
 
 
     public static void addLoan(String ssn, double amount, int term, double interest, int unpaidMonths) throws Exception {
