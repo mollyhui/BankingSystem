@@ -3,7 +3,6 @@ import java.io.Serializable;
 public class Manager extends User implements Serializable {
 	private double balance;
 	private StockMarket stockMarket = new StockMarket();
-    //private AppBackup backup;
 
     Manager(String firstName, String lastName, String ssn, String password) {
         super(firstName, lastName, ssn, password);

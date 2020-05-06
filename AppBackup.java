@@ -40,6 +40,14 @@ public class AppBackup {
     static int numberOfStocksColumns= 2;
     static int stockNameIndex = 0;
     static int stockPriceIndex = 1;
+
+    static int numberOfReport = 6;
+    static int SSNIndex = 0;
+    static int transactionTypeIndex = 1;
+    static int amountIndex = 2;
+    static int dayIndex = 3;
+    static int monthIndex = 4;
+    static int yearIndex = 5;
      
     
 
@@ -80,9 +88,9 @@ public class AppBackup {
         else if (args[0].equals("v")) {
             createCustomerStock("45676543456", "Amazon", 100);
             createCustomerStock("45676543457", "Google", 50);
-            deleteStockFromCustomerStock("45676543457","Amazon");
-            updateCustomerStockAttribute("45676543456", "Amazon", 2, "66");
-            System.out.println( getCustomerStockAttribute("45676543456", 1));
+            // deleteStockFromCustomerStock("45676543457","Amazon");
+            // updateCustomerStockAttribute("45676543456", "Amazon", 2, "66");
+            // System.out.println( getCustomerStockAttribute("45676543456", 1));
         }
 
         else if (args[0].equals("s")) {
@@ -91,6 +99,13 @@ public class AppBackup {
             deleteStockFromMarket("Google");
             updateStockAttribute("Amazon", 1, "88");
             System.out.println(getStockAttribute("Amazon", 1));
+            System.out.println(stockExists("Google"));
+            
+        }
+
+        else if (args[0].equals("p")) {
+            createTransactionRecord("45676543457", "Deposit", 200, 1,2,1998);
+
             
         }
     }
@@ -120,8 +135,10 @@ public class AppBackup {
      *  DONE deleteStockFromCustomerStock
      *  DONE updateCustomerStockAttribute
      *  DONE getCustomerStockAttribute
+     *  DONE stockExists
+
      *  
-     *  TODO addTransactionRecord.csv with date
+     *  DONE createTransactionRecord
      *
      */
 
@@ -224,7 +241,7 @@ public class AppBackup {
         }
     }
 
-    public static double getBalanceOfManagers() throws IOException {
+    public static int getBalanceOfManagers() throws IOException {
         BufferedReader csvReader = new BufferedReader(new FileReader("managerData.txt"));
         int balance = 0;
         String row;
@@ -251,6 +268,25 @@ public class AppBackup {
             csvWriter.close();
         }
     	
+    }
+
+    public static void createTransactionRecord(String ssn, String transactionType, double amount, int day, int month, int year) throws Exception{
+        if (!userExists("customer", ssn)) {
+            throw new Exception("user not exists");
+        }else {
+            FileWriter csvWriter = new FileWriter("dailyReport.txt", true);
+            Date date = new Date(day,month,year);
+            csvWriter.append(ssn);
+            csvWriter.append(",");
+            csvWriter.append(transactionType);
+            csvWriter.append(",");
+            csvWriter.append(Double.toString(amount));
+            csvWriter.append(",");
+            csvWriter.append(date.toString());
+            csvWriter.append("\n");
+            csvWriter.flush();
+            csvWriter.close();
+        }
     }
 
     public static void createStockMarket(String name, double price) throws Exception{
@@ -291,8 +327,6 @@ public class AppBackup {
       csvWriter.close();
     }
 
-
-
     public static boolean customerAccountExists(String ssn, String accountType) throws IOException {
         boolean accountExists = false;
 
@@ -324,6 +358,21 @@ public class AppBackup {
             }
         }
         return accountExists;
+    }
+
+    public static boolean stockExists(String name) throws IOException{
+        boolean stockExists = false;
+        BufferedReader csvReader = new BufferedReader(new FileReader("StockMarket.txt"));
+        String row;
+        while ((row = csvReader.readLine()) != null) {
+            String[] data = row.split(",");
+            if (data[stockNameIndex].equals(name)) {
+                stockExists = true;
+
+            }
+        }
+        return stockExists;
+
     }
 
 
