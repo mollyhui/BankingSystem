@@ -3,7 +3,7 @@ public class LoanApplication {
     private double amount;
     private int term_months;
 
-    LoanApplication(Customer customer, double loanRequest, int term_months) {
+    public LoanApplication(Customer customer, double loanRequest, int term_months) {
         this.customer = customer;
         this.amount = loanRequest;
         this.term_months = term_months;

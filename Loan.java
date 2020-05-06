@@ -6,7 +6,7 @@ public class Loan {
     private double interest_rate;
     private double monthly_payment;
 
-    Loan(double amount, int term_months, double interest_rate) {
+    public Loan(double amount, int term_months, double interest_rate) {
         this.amount = amount;
         this.unpaidAmount = amount;
         this.term_months = term_months;

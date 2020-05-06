@@ -2,7 +2,7 @@
 public class Checking extends Account{
 	private String accountType = "Checking";
 	
-	Checking(double initialDeposit){
+	public Checking(double initialDeposit){
         this.setBalance(initialDeposit);
         this.setTransactionFee(10);
     }

@@ -1,14 +1,25 @@
 import java.io.Serializable;
 
-public abstract class Account  implements Serializable{
+public abstract class Account implements Serializable{
     private double balance = 0;
     private double interest = 0;
     private int accountNumber;
     private static int numberOfAccounts = 1000000;
     private double transactionFee;
+    private String transactionType;
+
+	
     
-    Account(){
+    public Account(){
         this.accountNumber = getNextAccountNumber();
+    }
+
+    public String getTransactionType(){
+        return this.transactionType;
+    }
+
+    public void setTransactionType(String transactionType){
+        this.transactionType = transactionType;
     }
     
     public int getAccountNumber() {
@@ -41,14 +52,20 @@ public abstract class Account  implements Serializable{
         this.interest = interest;
     }
     
-    public void withdraw(double amount) throws InsufficientFundsException{
-        if(amount + transactionFee > balance){
+    public void withdraw(double money) throws Exception{
+    	//update manager's balance(transaction fee)
+        int manager_balance = AppBackup.getBalanceOfManagers();
+        AppBackup.changeAttributeOfAll("manager", 3, Double.toString((int)this.transactionFee + manager_balance));
+        if(money+ this.transactionFee > balance){
             throw new InsufficientFundsException();
         }
-        balance -= amount + transactionFee;
+        balance -= money+this.transactionFee;
     }
     
-    public void deposit(double amount) throws InvalidAmountException{
+    public void deposit(double amount) throws Exception{
+    	//update manager's balance(transaction fee)
+        int manager_balance = AppBackup.getBalanceOfManagers();
+        AppBackup.changeAttributeOfAll("manager", 3, Double.toString((int)this.transactionFee + manager_balance));
         if(amount <= 0){
             throw new InvalidAmountException();
         }
@@ -57,6 +74,9 @@ public abstract class Account  implements Serializable{
     }
     
     public void transfer(Account account, double amount) throws Exception{
+    	//update manager's balance(transaction fee)
+        int manager_balance = AppBackup.getBalanceOfManagers();
+        AppBackup.changeAttributeOfAll("manager", 3, Double.toString((int)this.transactionFee + manager_balance));
 		if(amount + this.getTransactionFee() > this.getBalance()){
             throw new InsufficientFundsException();
         }else{

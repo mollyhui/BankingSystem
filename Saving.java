@@ -1,7 +1,7 @@
 public class Saving extends Account{
 	private String accountType = "Saving";
 	
-	Saving(double initialDeposit){
+	public Saving(double initialDeposit){
         this.setBalance(initialDeposit);
         this.setTransactionFee(10);
     }
@@ -29,6 +29,13 @@ public class Saving extends Account{
 				this.setBalance(this.getBalance()-amount-this.getTransactionFee());
 	        	account.setBalance(account.getBalance() + amount);
 			}
+		}else {
+			if(amount + this.getTransactionFee() > this.getBalance()){
+	            throw new InsufficientFundsException();
+	        }else{
+	        	this.setBalance(this.getBalance()-amount-this.getTransactionFee());
+	        	account.setBalance(account.getBalance() + amount);
+	        }
 		}
 	}
     

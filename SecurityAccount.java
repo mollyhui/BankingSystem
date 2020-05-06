@@ -2,7 +2,7 @@
 public class SecurityAccount extends Account{
 	private String accountType = "Security";
 		
-	SecurityAccount(double initialDeposit){
+	public SecurityAccount(double initialDeposit){
 	        this.setBalance(initialDeposit);
 	        this.setTransactionFee(10);
 	    }
@@ -10,6 +10,7 @@ public class SecurityAccount extends Account{
 		public String getAccountType() {
 	        return accountType;
 	    }
+		
 	    
 	    @Override
 	    public String toString(){
