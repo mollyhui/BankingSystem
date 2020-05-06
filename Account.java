@@ -10,7 +10,7 @@ public abstract class Account implements Serializable{
 
 	
     
-    Account(){
+    public Account(){
         this.accountNumber = getNextAccountNumber();
     }
 

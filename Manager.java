@@ -4,7 +4,7 @@ public class Manager extends User implements Serializable {
 	private double balance;
 	private StockMarket stockMarket = new StockMarket();
 
-    Manager(String firstName, String lastName, String ssn, String password) {
+    public Manager(String firstName, String lastName, String ssn, String password) {
         super(firstName, lastName, ssn, password);
     }
     

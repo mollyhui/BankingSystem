@@ -1,7 +1,7 @@
 public class Saving extends Account{
 	private String accountType = "Saving";
 	
-	Saving(double initialDeposit){
+	public Saving(double initialDeposit){
         this.setBalance(initialDeposit);
         this.setTransactionFee(10);
     }

@@ -48,6 +48,18 @@ We assume one customer can only have one loan.
 appBackup.java:
 This class cretes csv files and contains methods to access attributes in csv files.
 
+StockMarket.txt:
+represents stock market, contains stocks
+
+customerStock.txt
+contains stocks owned by each of customers
+
+customerData.txt
+contains information of a customer
+
+dailyReport.txt
+daily report of transactions for each of customer
+
 
 
 
